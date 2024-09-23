@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 300px;
+      }
+
+      button {
+        width: 100px;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <h1>URL Shortner</h1>
+
+    <!-- locals store data which we have sent from backend -->
+    <% if (locals.id) { %>
+    <p>
+      Generated URL:
+      <a target="_blank" href="http://localhost:8000/url/<%= locals.id %>"
+        >http://localhost:8000/url/<%= locals.id %></a
+      >
+    </p>
+    <% } %>
+
+    <form method="POST" action="/url">
+      <label> Enter Your URL</label>
+      <input
+        type="text"
+        name="url"
+        placeholder="https://dst-download.netlify.app/"
+      />
+      <button type="submit">Generate</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Short Id</th>
+          <th>Redirect URL</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (locals.urls && locals.urls.length > 0) { %> <%
+        locals.urls.forEach(function(url,index) { %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td>
+            <a target="_blank" href="http://localhost:8000/url/<%= url.shortId %>">
+              <%= url.shortId %>
+            </a>
+          </td>
+          <td><%= url.redirectUrl %></td>
+          <td><%= url.visitHistory.length %></td>
+        </tr>
+        <% }) %> <% } else { %>
+        <tr>
+          <td colspan="4">No urls found</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </body>
+</html>
